@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+//main class
 public class Alexandria extends Application{
 	
 	private static Template<String> template = new Template<String>();//static reference to Template.java
