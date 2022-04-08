@@ -1,5 +1,7 @@
 # CMIS-202-Major-Project-Assignment
-Major Project Assignment for my Computer Science 2 class.
+Major Project Assignment for my Computer Science 2 class ONL1.
+
+By Kian Lewis
 
 
 To access the main .java files go to Library of Alexandria/src/application. Alexandria.java is the main class.
