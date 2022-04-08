@@ -4,7 +4,7 @@ Major Project Assignment for my Computer Science 2 class.
 
 To access the main .java files go to Library of Alexandria/src/application. Alexandria.java is the main class.
 
-Who Are The Users?
+<b>Who Are The Users?</b>
 
   This program was designed to suit the needs of a light reader who has a small collection of books.
   
