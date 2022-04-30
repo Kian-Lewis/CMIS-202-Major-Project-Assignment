@@ -29,7 +29,21 @@ LibraryUML is the UML diagram for this program.
   programs, everyone wants to sell you something. The fact that this program does not do this(yet) could be a niche selling point of it for someone who absolutely 
   cannot tolerate advertisement.
 
-<b><h2>Requirement Locations</h2></b>
+<b><h2>Requirement Locations For Part 2</h2></b>
+  <b><h3>1. Contain at least one stack, queue, or dequeue structure from the API</h3></b>
+    In AddEntry.java the program has been altered so that the user has the option to add more or to save the book to file immediately
+    If the user chooses to add another book then the details of the current book are stored in a queue
+    When the user chooses to save their books the queue is saved to file all at once.
+    Also resets the textfields upon either action.
+  <b><h3>2. Use a link list, set, or map structure of your own creation</h3></b>
+    Uses sets in ViewLibrary.java in order to remove duplicates from the file when the user presses a button.
+    Takes advantage of the fact that a hashset does only allows unique items to do so using the titles of books as the key.
+   <b><h3>3. Update GitHub with all changes</h3></b>
+    Done.
+   <b><h3>4. Participate in any Blackboard activities related to this part</h3></b>
+    Hopefully completed as well.
+
+<b><h2>Requirement Locations For Part 1</h2></b>
 
   <b><h3>1.Read/write to a file</h3></b>
     In AddEntry.java the program writes to a file.
