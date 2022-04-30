@@ -12,6 +12,9 @@ public class EventManager {
 	public HandleHelp handleHelp = new HandleHelp();
 	public HandleHome handleHome = new HandleHome();
 	public HandleQuit handleQuit = new HandleQuit();
+	public HandleClean handleClean = new HandleClean();
+	public HandleQueue handleQueue = new HandleQueue();
+	public HandleSave handleSave = new HandleSave();
 	
 	//Handle the view library buttons
 	class HandleView implements EventHandler<ActionEvent> {
@@ -26,6 +29,15 @@ public class EventManager {
 		@Override
 		public void handle(ActionEvent e) {
 			Alexandria.stage.setScene(AddEntry.buildBookScene());
+		}
+	}
+	
+	//Handle the clean duplicates button
+	class HandleClean implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent e) {
+			ViewLibrary.cleanDuplicates();
+			Alexandria.stage.setScene(ViewLibrary.buildLibraryScene());
 		}
 	}
 
@@ -52,4 +64,20 @@ public class EventManager {
 			Platform.exit();
 		}
 	}
+	
+	//Handle the add to queue button
+	class HandleQueue implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent e) {
+			AddEntry.saveBookToQueue(AddEntry.bPane);
+		}
+	}
+	
+	//Handle the save from queue button
+		class HandleSave implements EventHandler<ActionEvent> {
+			@Override
+			public void handle(ActionEvent e) {
+				AddEntry.saveBooksInQueue(AddEntry.bPane);
+			}
+		}
 }

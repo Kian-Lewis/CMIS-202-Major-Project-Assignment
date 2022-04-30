@@ -1,8 +1,12 @@
 package application;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javafx.geometry.Insets;
@@ -213,6 +217,132 @@ public class ViewLibrary {
 		
 		return hBox;
 	}
+	
+	//Use hashsets to remove duplicates from the file
+	@SuppressWarnings("unused")
+	public static void cleanDuplicates() {
+		//create sets for the books, and for amount of duplicates
+		Set<String> currentSet = new HashSet<>();
+		Set<Integer> duplicateLines = new HashSet<>();
+		
+		int dupes = 0;
+		int lineCount = 0;
+		
+		//Read from file for duplicate titles.
+		try {
+			File file = new File(bookPath);
+			Scanner scan = new Scanner(file);
+			
+			while (scan.hasNextLine()) {
+				//Create tokenizer
+				String temp = (String) scan.nextLine();
+				if (temp.length() < 1) {
+					System.out.println("next line empty");
+					break;
+				}
+				StringTokenizer str = new StringTokenizer((String)temp, "|");
+				
+				//make a new book
+				String bookTitle = str.nextToken();
+				
+				boolean newDupe = false;
+				if (currentSet.contains(bookTitle)) {
+					dupes++;
+					newDupe = true;
+				}
+
+				//Add assembled book to set if title is not duplicate
+				currentSet.add(bookTitle);
+				if (newDupe == true) {
+					duplicateLines.add(lineCount);
+				}
+				lineCount++;
+			}
+			scan.close();
+			//call method to create list wihtout duplicates
+			removeDuplicatesInFile(duplicateLines);
+		} catch (Exception e) {
+			template.CreateErrorMessage(e.toString());
+		}
+	}
+	
+	//remove a line in the file
+	public static void removeDuplicatesInFile(Set<Integer> duplicateLines) {
+		int lineCount = 0;
+		ArrayList<Book> list = new ArrayList<>();
+		
+		//try to create new list without duplicates
+		try {
+			File file = new File(bookPath);
+			Scanner scan = new Scanner(file);
+			
+			while (scan.hasNextLine()) {
+				//Create tokenizer
+				String temp = (String) scan.nextLine();
+				if (temp.length() < 1) {
+					System.out.println("next line empty");
+					break;
+				}
+				StringTokenizer str = new StringTokenizer((String)temp, "|");
+				
+				//make a new book
+				Book book = new Book();
+				if (!duplicateLines.contains(lineCount)) {
+					//separate tokens
+					for (int i = 0; str.hasMoreTokens(); i++) {
+						if (i == 0) {
+							book.setTitle(str.nextToken());//get title of book
+						}
+						else if (i == 1) {
+							book.setGenre(str.nextToken());//get author name
+						}
+						else if (i == 2) {
+							book.setAuthor(str.nextToken());//get genre
+						}
+						else {
+							book.setPageCount(Integer.parseInt(str.nextToken()));//get page count
+						}
+					}
+				}
+				//Add assembled book to list
+				list.add(book);
+				lineCount++;
+			}
+			scan.close();
+			//call method to overwrite the contents of the file with that of the new list to remove duplicates.
+			overwriteFile(list);
+		} catch (Exception e) {
+			template.CreateErrorMessage(e.toString());
+		}
+	}
+	
+	//Overwrite old file with new file
+	public static void overwriteFile(ArrayList<Book> list) {
+		PrintWriter file;
+		
+		for (int i = 0; i < list.size(); i++) {			
+			//make a new book
+			Book book = list.get(i);
+			
+			//try to record book to file
+			try {
+				//if first book then overwrite the file
+				if (i == 0) {
+					file = new PrintWriter(new FileOutputStream(new File(bookPath), false));
+					file.println(book.recordBook());
+					file.close();
+				} 
+				else { //if not first book then don't overwrite, append the file instead
+					file = new PrintWriter(new FileOutputStream(new File(bookPath), true));
+					file.println(book.recordBook());
+					file.close();
+				}
+			} catch (Exception e){
+				template.CreateErrorMessage(e.toString());
+			}
+
+		}
+	}
 
 	//create buttons for ui
 	private static HBox eventBox() {
@@ -225,6 +355,10 @@ public class ViewLibrary {
 		//create buttons
 		Button btHome = template.CreateButton("Home");
 		btHome.setOnAction(eventManager.handleHome);
+		
+		//Clean the library of duplicates
+		Button btClean = template.CreateButton("Remove Duplicates");
+		btClean.setOnAction(eventManager.handleClean);
 		
 		//add a new book
 		Button btAdd = template.CreateButton("New Book");
@@ -239,7 +373,7 @@ public class ViewLibrary {
 		btQuit.setOnAction(eventManager.handleQuit);
 		
 		//add buttons
-		hBox.getChildren().addAll(btHome, btAdd, btHelp, btQuit);
+		hBox.getChildren().addAll(btHome, btClean, btAdd, btHelp, btQuit);
 		
 		//set alignment
 		hBox.setAlignment(Pos.CENTER);
