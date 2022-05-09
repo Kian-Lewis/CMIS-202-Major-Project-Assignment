@@ -29,6 +29,12 @@ LibraryUML is the UML diagram for this program.
   programs, everyone wants to sell you something. The fact that this program does not do this(yet) could be a niche selling point of it for someone who absolutely 
   cannot tolerate advertisement.
 
+<b><h2>Requirement Locations For Part 3</h2></b>
+  <b><h3>1. Contain an efficient Binary Search Tree</h3></b>
+    Reworked the code for removing duplicate books to in ViewLibrary.java so that it makes use of a binary search tree. You'll find it in the method cleanDuplicates().
+  <b><h3>2. Include a hash table structure of your own creation</h3></b>
+    Added a hashmap structure inside of ViewLibrary.java that is built in the method buildDescriptionMap(). It uses the title of a book as a key to find the rest of        the book. It's purpose is to connect a mouse event of clicking on title to seeing the description of a book in another scene. The mouse event is called from            createSmallTitleLabel(T name) inside of Template.java and the event is handled inside of EventManager.java
+
 <b><h2>Requirement Locations For Part 2</h2></b>
   <b><h3>1. Contain at least one stack, queue, or dequeue structure from the API</h3></b>
     In AddEntry.java the program has been altered so that the user has the option to add more or to save the book to file immediately
