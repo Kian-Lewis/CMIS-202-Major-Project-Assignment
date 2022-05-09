@@ -3,6 +3,8 @@ package application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 public class EventManager {
 	
@@ -15,6 +17,7 @@ public class EventManager {
 	public HandleClean handleClean = new HandleClean();
 	public HandleQueue handleQueue = new HandleQueue();
 	public HandleSave handleSave = new HandleSave();
+	public HandleDescription handleDescription = new HandleDescription();
 	
 	//Handle the view library buttons
 	class HandleView implements EventHandler<ActionEvent> {
@@ -74,10 +77,25 @@ public class EventManager {
 	}
 	
 	//Handle the save from queue button
-		class HandleSave implements EventHandler<ActionEvent> {
-			@Override
-			public void handle(ActionEvent e) {
-				AddEntry.saveBooksInQueue(AddEntry.bPane);
-			}
+	class HandleSave implements EventHandler<ActionEvent> {
+		@Override
+		public void handle(ActionEvent e) {
+			AddEntry.saveBooksInQueue(AddEntry.bPane);
 		}
+	}
+		
+	//handle clicking on a title to view description
+	class HandleDescription implements EventHandler<MouseEvent> {
+		@Override
+		public void handle(MouseEvent e) {
+			//Get the text from the title label clicked
+			Label lbl = ((Label) e.getSource());
+			String lblText = lbl.getText();
+			
+			//find the book that the title is the key to.
+			Book book = ViewLibrary.descriptionMap.get(lblText);
+			Alexandria.stage.setScene(BookDisplay.buildBookDisplayScene(book));
+			
+		}
+	}
 }

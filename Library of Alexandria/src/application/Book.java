@@ -11,14 +11,14 @@ public class Book extends Media {
 	private int pageCount;
 	
 	//Constructors
-	public Book(String title, String genre, String author, int pageCount) {
-		super(title, genre);
+	public Book(String title, String genre, String author, int pageCount, String description) {
+		super(title, genre, description);
 		this.author = author;
 		this.pageCount = pageCount;
 	}
 	
 	public Book() {
-		super("", "");
+		super("", "", "");
 		author = "";
 		pageCount = 0;
 	}
@@ -81,7 +81,7 @@ public class Book extends Media {
 		String recordAuthor = getAuthor();
 		int recordPageCount = getPageCount();
 		
-		return (super.recordBook() + "|" + recordAuthor + "|" + recordPageCount);
+		return (super.recordBook() + "|" + recordAuthor + "|" + recordPageCount + "|" + super.getDescription());
 		
 	}
 }

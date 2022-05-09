@@ -1,21 +1,24 @@
 package application;
 
-//consructors, mutators, and accessors for book objects.
+//consructors, mutators, and accessors for media objects.
 public class Media {
 	
 	//Declaring variables
 	private String title; //title
 	private String genre; //book genre, displayed according to number
-	
+	private String description; //description of the media
+
 	//Constructors
-	public Media(String title, String genre) {
+	public Media(String title, String genre, String description) {
 		this.title = title;
 		this.genre = genre;
+		this.description = description;
 	}
 	
 	public Media() {
 		title = "";
 		genre = "";
+		description = "";
 	}
 	
 	//Mutators
@@ -24,6 +27,9 @@ public class Media {
 	}
 	public void setGenre(String genre) {//set genre
 		this.genre = genre;
+	}
+	public void setDescription(String description) {//set description
+		this.description = description;
 	}
 	
 	//Accessors
@@ -34,6 +40,10 @@ public class Media {
 	public String getGenre() {
 		return genre;
 	}
+	public String getDescription() {
+		return description;
+	}
+	
 	//make string title case
 	public String titleCase(String title) {
 		String words[] = title.split("\\s");

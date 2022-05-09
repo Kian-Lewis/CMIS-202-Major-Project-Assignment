@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -52,18 +53,21 @@ public class AddEntry {
 		TextField lName = new TextField();//last name
 		TextField pgCount = new TextField();//page count
 		
+		//declare textArea
+		TextArea descriptionText = new TextArea();//description
+		
 		//combobox and checkbox
 		ComboBox<String> genreBox = new ComboBox<>();
-		genreBox.getItems().addAll("Fantasy", "Sci-Fi", "Mystery", "Romance", "Children's", "Comedy", "Young Adult", 
-				 "Biography", "Auto-Biography", "Academic", "History", "Religion");
+		genreBox.getItems().addAll("Fantasy", "Sci-Fi", "Mystery", "Romance", "Children's", "Young Adult", 
+				 "Biography", "Auto-Biography", "Historical", "Religion");
 		genreBox.setValue("Fantasy");
 		
 		//set contents of authorPane
-		authorBox.getChildren().addAll((template.CreateSmallLabel("Title of The Book:")), titleText, template.CreateSmallLabel("Author's First Name:"), fName, 
+		authorBox.getChildren().addAll((template.CreateSmallLabel("Page Count:")), pgCount, template.CreateSmallLabel("Author's First Name:"), fName, 
 				template.CreateSmallLabel("Author's Middle Initial:"), mName, template.CreateSmallLabel("Author's Last Name:"), lName);
 		
 		//Set contents of miscPane
-		miscBox.getChildren().addAll(template.CreateSmallLabel("Page Count:"), pgCount, template.CreateSmallLabel("Genre:"), genreBox);
+		miscBox.getChildren().addAll(template.CreateSmallLabel("Book Title:"), titleText, template.CreateSmallLabel("Genre:"), genreBox, template.CreateSmallLabel("Description:"), descriptionText);
 		
 		//Vboxes get added to Hbox
 		HBox hBox = new HBox();
@@ -93,14 +97,16 @@ public class AddEntry {
 		book.setAuthor(firstName, midInitial, lastName);		
 			
 		//record title
-		book.setTitle((String) ((TextField) leftBox.getChildren().get(1)).getText());
+		book.setTitle((String) ((TextField) rightBox.getChildren().get(1)).getText());
 			
 		//record page count
-		String pgCt = ((String) (((TextField) rightBox.getChildren().get(1)).getText()));
+		String pgCt = ((String) (((TextField) leftBox.getChildren().get(1)).getText()));
 		book.setPageCount(Integer.parseInt(pgCt));
 			
 		//record genre
 		book.setGenre((String) ((ComboBox<String>)rightBox.getChildren().get(3)).getSelectionModel().getSelectedItem());
+		
+		book.setDescription((String) (((TextArea) rightBox.getChildren().get(5)).getText()));
 			
 		//Record book to file if not comic
 		saveQueue.add(book);
@@ -111,6 +117,7 @@ public class AddEntry {
 		((TextField) leftBox.getChildren().get(5)).setText("");
 		((TextField) leftBox.getChildren().get(7)).setText("");
 		((TextField) rightBox.getChildren().get(1)).setText("");
+		((TextArea) rightBox.getChildren().get(5)).setText("");
 	}
 	
 	//Save the books in queue to file
@@ -123,11 +130,11 @@ public class AddEntry {
 		VBox rightBox = (VBox) centerBox.getChildren().get(1);
 		
 		//get textfields
-		String Title = (String) ((TextField) leftBox.getChildren().get(1)).getText();
+		String Title = (String) ((TextField) rightBox.getChildren().get(1)).getText();
 		String fName = (String) ((TextField) leftBox.getChildren().get(3)).getText();
 		String mI = (String) ((TextField) leftBox.getChildren().get(5)).getText();
 		String lName = (String) ((TextField) leftBox.getChildren().get(7)).getText();
-		String pgCt = ((String) (((TextField) rightBox.getChildren().get(1)).getText()));
+		String pgCt = ((String) (((TextField) leftBox.getChildren().get(1)).getText()));
 		
 		try {
 			//Check to see if the textFields have contents, if so save book

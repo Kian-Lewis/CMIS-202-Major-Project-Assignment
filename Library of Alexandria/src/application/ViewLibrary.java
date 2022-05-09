@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,24 +23,36 @@ public class ViewLibrary {
 	private static String bookPath = "C:\\temp\\library.txt";//reference to file path
 	private static ArrayList<Book> bookArray;
 	
+	//Hash map to connect a description to its title
+	public static MyHashMap<String, Book> descriptionMap = new MyHashMap<>();
+	
 	//build the scene for displaying books
 	public static Scene buildLibraryScene() {
 		//create the arraylist of type Book to store books from file
 		int listSize = 0;
 		try {
-			bookArray = assembleLibrary();
+			cleanDuplicates(); //clean the file of duplicates before building ui
+			bookArray = assembleLibrary(); //build array of books from file
 			listSize = bookArray.size();
+			
+			//Build hash map for displaying descriptions
+			buildDescriptionMap();
 		} catch (NullPointerException e){
 			template.CreateErrorMessage(e.toString());
 		}
 		
-		//sort the arraylist
+		//sort the array list based on author last name
 		mergeSort(0, listSize - 1);
+		
+		//build ScrollPane so that if large enough the user can scroll through their books
+		ScrollPane sPane = new ScrollPane(buildLibrary());
+		sPane.setFitToHeight(true);
+		sPane.setFitToWidth(true);
 		
 		//create borderpane
 		BorderPane bPane = new BorderPane();
-		bPane.setCenter(buildLibrary());
-		bPane.setBottom(eventBox());
+		bPane.setCenter(sPane); //put scroll pane in center
+		bPane.setBottom(eventBox()); //put buttons on bottom
 		
 		//create scene using borderpane
 		Scene scene = new Scene(bPane);
@@ -91,8 +102,11 @@ public class ViewLibrary {
 				else if (i == 2) {
 					book.setGenre(str.nextToken());//get genre
 				}
-				else {
+				else if (i == 3){
 					book.setPageCount(Integer.parseInt(str.nextToken()));//get page count
+				}
+				else {
+					book.setDescription(str.nextToken());
 				}
 			}
 			//Add assembled book to list
@@ -101,7 +115,6 @@ public class ViewLibrary {
 		return list;
 	}
 	
-<<<<<<< HEAD
 	//Build main pane UI
 	private static HBox buildLibrary() {
 		//establish boxes
@@ -156,8 +169,6 @@ public class ViewLibrary {
 		}
 	}
 	
-=======
->>>>>>> parent of 495e5d8 (Part 3 Commit for Hash Maps and BSTs)
 	//Comments on merge sort efficiency
 	/*
 	 The way that merge sort works is by taking on a divide and conquer type approach. It recursively breaks down a problem into two or more 
@@ -234,56 +245,14 @@ public class ViewLibrary {
 		}
 	}
 	
-	//Build UI
-	private static HBox buildLibrary() {
-		//establish boxes
-		HBox hBox = new HBox();
-		VBox titleBox = new VBox();
-		VBox authorBox = new VBox();
-		VBox genreBox = new VBox();
-		VBox pageBox = new VBox(); 
-		
-		//pad the vboxes
-		titleBox.setPadding(new Insets(15, 15, 15, 15));
-		authorBox.setPadding(new Insets(15, 15, 15, 15));
-		genreBox.setPadding(new Insets(15, 15, 15, 15));
-		pageBox.setPadding(new Insets(15, 15, 15, 15));
-		
-		//add labels
-		titleBox.getChildren().add(template.CreateMainLabel("Title", "black")); //create title header
-		authorBox.getChildren().add(template.CreateMainLabel("Author", "black")); //create author header
-		genreBox.getChildren().add(template.CreateMainLabel("Genre", "black")); //create genre header
-		pageBox.getChildren().add(template.CreateMainLabel("Pages", "black")); //create page count header
-		
-		//set list size variable 
-		int listSize = bookArray.size();
-		//Add each individual book to display
-		for (int i = 0; i < listSize; i++) {
-			//get the book at the specified spot
-			Book book = (Book) bookArray.get(i);
-			//add each part of the book to display in order
-			titleBox.getChildren().add(template.CreateSmallLabel(book.getTitle()));
-			authorBox.getChildren().add(template.CreateSmallLabel(book.getAuthor()));
-			genreBox.getChildren().add(template.CreateSmallLabel(book.getGenre()));
-			pageBox.getChildren().add(intTemplate.CreateNumSmallLabel(book.getPageCount()));
-		}
-		
-		//add vboxes to hbox
-		hBox.getChildren().addAll(titleBox, authorBox, genreBox, pageBox);
-		hBox.setAlignment(Pos.CENTER);
-		
-		return hBox;
-	}
-	
-	//Use hashsets to remove duplicates from the file
-	@SuppressWarnings("unused")
+	//Use a binary search tree to check the file for duplicate titles;
+	//Improvement over the hash set solution applied before, allowing less code.
 	public static void cleanDuplicates() {
 		//create sets for the books, and for amount of duplicates
-		Set<String> currentSet = new HashSet<>();
-		Set<Integer> duplicateLines = new HashSet<>();
+		ArrayList<Book> cleanList = new ArrayList<>();
 		
-		int dupes = 0;
-		int lineCount = 0;
+		//Binary Search Tree(BST) for detecting duplicate Titles
+		JunkBST<String> dupeTitleTree = new JunkBST<>();
 		
 		//Read from file for duplicate titles.
 		try {
@@ -300,79 +269,47 @@ public class ViewLibrary {
 				StringTokenizer str = new StringTokenizer((String)temp, "|");
 				
 				//make a new book
+				Book book = new Book();
+				
+				//get title
 				String bookTitle = str.nextToken();
 				
-				boolean newDupe = false;
-				if (currentSet.contains(bookTitle)) {
-					dupes++;
-					newDupe = true;
+				//check if the BST contains the title already
+				if (dupeTitleTree.contains(bookTitle)) {
+					System.out.println("Duplicate Book Title");
 				}
-
-				//Add assembled book to set if title is not duplicate
-				currentSet.add(bookTitle);
-				if (newDupe == true) {
-					duplicateLines.add(lineCount);
-				}
-				lineCount++;
-			}
-			scan.close();
-			//call method to create list wihtout duplicates
-			removeDuplicatesInFile(duplicateLines);
-		} catch (Exception e) {
-			template.CreateErrorMessage(e.toString());
-		}
-	}
-	
-	//remove a line in the file
-	public static void removeDuplicatesInFile(Set<Integer> duplicateLines) {
-		int lineCount = 0;
-		ArrayList<Book> list = new ArrayList<>();
-		
-		//try to create new list without duplicates
-		try {
-			File file = new File(bookPath);
-			Scanner scan = new Scanner(file);
-			
-			while (scan.hasNextLine()) {
-				//Create tokenizer
-				String temp = (String) scan.nextLine();
-				if (temp.length() < 1) {
-					System.out.println("next line empty");
-					break;
-				}
-				StringTokenizer str = new StringTokenizer((String)temp, "|");
-				
-				//make a new book
-				Book book = new Book();
-				if (!duplicateLines.contains(lineCount)) {
-					//separate tokens
+				else { //build the book like normal to be sent to overwrite the file without dupes
+					dupeTitleTree.insert(bookTitle);
+					
+					//building book from file
+					book.setTitle(bookTitle);
 					for (int i = 0; str.hasMoreTokens(); i++) {
 						if (i == 0) {
-							book.setTitle(str.nextToken());//get title of book
+							book.setGenre(str.nextToken());
 						}
 						else if (i == 1) {
-							book.setGenre(str.nextToken());//get author name
+							book.setAuthor(str.nextToken());
 						}
-						else if (i == 2) {
-							book.setAuthor(str.nextToken());//get genre
+						else if (i == 2){
+							book.setPageCount(Integer.parseInt(str.nextToken()));//get page count
 						}
 						else {
-							book.setPageCount(Integer.parseInt(str.nextToken()));//get page count
+							book.setDescription(str.nextToken());
 						}
 					}
 				}
-				//Add assembled book to list
-				list.add(book);
-				lineCount++;
+				//add the book to the array list
+				cleanList.add(book);
 			}
-			scan.close();
-			//call method to overwrite the contents of the file with that of the new list to remove duplicates.
-			overwriteFile(list);
+			scan.close(); //close scanner
+			
+			//call method to create list without duplicates
+			overwriteFile(cleanList);
 		} catch (Exception e) {
 			template.CreateErrorMessage(e.toString());
 		}
 	}
-	
+
 	//Overwrite old file with new file
 	public static void overwriteFile(ArrayList<Book> list) {
 		PrintWriter file;

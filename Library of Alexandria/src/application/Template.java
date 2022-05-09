@@ -13,6 +13,8 @@ import javafx.scene.text.*;
 //Makes use of generics so that certain methods can take in a number of variable types in order to create labels and buttons.
 public class Template <T> {
 	
+	EventManager eventManager = new EventManager();
+	
 	//create a button
 	public Button CreateButton(T name) {
 		Button bt = new Button(name.toString());
@@ -33,12 +35,32 @@ public class Template <T> {
 		return bt;
 	}
 	
-	//create a big label
+	//Create a huge label
+	public Label CreateHugeLabel(T name) {
+		Label lbl = new Label(name.toString());
+		lbl.setStyle("-fx-text-fill: black");
+		lbl.setFont(Font.font("Times New Roman", 36));
+		lbl.setWrapText(true);
+		
+		return lbl;
+	}
+	
+	//create a big label with color specified
 	public Label CreateMainLabel(T name, String color) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: " + color);
 		lbl.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
 		
+		return lbl;
+	}
+	
+	//create a big label with no color specified
+	public Label CreateBigLabel(T name) {
+		Label lbl = new Label(name.toString());
+		lbl.setStyle("-fx-text-fill: black");
+		lbl.setFont(Font.font("Times New Roman", 25));
+		lbl.setWrapText(true);
+			
 		return lbl;
 	}
 	
@@ -50,15 +72,36 @@ public class Template <T> {
 		
 		return lbl;
 	}
+	//create big label from integer, double, etc...
+		public Label CreateNumBigLabel(T name) {
+		Label lbl = new Label(String.valueOf(name));
+		lbl.setStyle("-fx-text-fill: black");
+		lbl.setFont(Font.font("Times New Roman", 26));
+		lbl.setWrapText(true);
+			
+		return lbl;
+		}
 	
-	//create a smaller label
+	//create a smaller label for titles to be clicked on
 	public Label CreateSmallLabel(T name) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: black");
-		lbl.setFont(Font.font("Times New Roman", 14));
+		lbl.setFont(Font.font("Times New Roman", 16));
 		
 		return lbl;
 	}
+	
+	//create a smaller label
+	public Label CreateSmallTitleLabel(T name) {
+		Label lbl = new Label(name.toString());
+		lbl.setStyle("-fx-text-fill: blue");
+		lbl.setFont(Font.font("Times New Roman", 16));
+		lbl.setUnderline(true);
+		
+		lbl.setOnMouseClicked(eventManager.handleDescription);
+		
+		return lbl;
+		}
 	
 	//create a small label from an integer, double, etc...
 	public Label CreateNumSmallLabel(T count) {
