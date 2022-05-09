@@ -101,6 +101,63 @@ public class ViewLibrary {
 		return list;
 	}
 	
+<<<<<<< HEAD
+	//Build main pane UI
+	private static HBox buildLibrary() {
+		//establish boxes
+		HBox hBox = new HBox();
+		VBox titleBox = new VBox(6);
+		VBox authorBox = new VBox(6);
+		VBox genreBox = new VBox(6);
+		VBox pageBox = new VBox(6); 
+		
+		//pad the vboxes
+		titleBox.setPadding(new Insets(15, 15, 15, 15));
+		authorBox.setPadding(new Insets(15, 15, 15, 15));
+		genreBox.setPadding(new Insets(15, 15, 15, 15));
+		pageBox.setPadding(new Insets(15, 15, 15, 15));
+		
+		//add labels
+		titleBox.getChildren().add(template.CreateMainLabel("Title", "black")); //create title header
+		authorBox.getChildren().add(template.CreateMainLabel("Author", "black")); //create author header
+		genreBox.getChildren().add(template.CreateMainLabel("Genre", "black")); //create genre header
+		pageBox.getChildren().add(template.CreateMainLabel("Pages", "black")); //create page count header
+			
+		//set list size variable 
+		int listSize = bookArray.size();
+		//Add each individual book to display
+		for (int i = 0; i < listSize; i++) {
+			//get the book at the specified spot
+			Book book = (Book) bookArray.get(i);
+			//add each part of the book to display in order
+			titleBox.getChildren().add(template.CreateSmallTitleLabel(book.getTitle()));
+			authorBox.getChildren().add(template.CreateSmallLabel(book.getAuthor()));
+			genreBox.getChildren().add(template.CreateSmallLabel(book.getGenre()));
+			pageBox.getChildren().add(intTemplate.CreateNumSmallLabel(book.getPageCount()));
+		}
+			
+		//add vboxes to hbox
+		hBox.getChildren().addAll(titleBox, authorBox, genreBox, pageBox);
+		hBox.setAlignment(Pos.CENTER);
+			
+		return hBox;
+	}
+	
+	//Method that will build a hash map from the book array
+	//Will have the title of the book as the key and the value being the description
+	private static void buildDescriptionMap() {
+		int listSize = bookArray.size();
+		
+		for (int i = 0; i < listSize; i++) {
+			Book book = bookArray.get(i);
+			String bookTitle = book.getTitle();
+
+			descriptionMap.put(bookTitle, book);
+		}
+	}
+	
+=======
+>>>>>>> parent of 495e5d8 (Part 3 Commit for Hash Maps and BSTs)
 	//Comments on merge sort efficiency
 	/*
 	 The way that merge sort works is by taking on a divide and conquer type approach. It recursively breaks down a problem into two or more 
