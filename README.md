@@ -33,7 +33,7 @@ LibraryUML is the UML diagram for this program.
   <b><h3>1. Implement multithreading</h3></b>
     The new class MyMergeSort implements multithreading during the merge sort process. This means that the mergeSort methods have been moved from ViewLibrary.java to       the new MyMergeSort.java.
   <b><h3>2. Implement one other improvement of my choice</h3></b>
-    I made many general UI improvements such as making the description entry box wrap text, adding the instruction to click on a title to viewLibrary, and adding a         logo image to the home screen. In addition to this I fixed an unexpected token error to do with a method I had in Template.java that would show up but not break       anything.
+    I made many general UI improvements such as making the description entry box wrap text, adding the instruction to click on a title to viewLibrary, and adding a         logo image to the home screen. In addition to this I fixed an unexpected token error to do with a method I had in Template.java that would show up but not break       anything. The biggest change is that I moved the library file from C:Temp to the src folder, letting me ship the program with premade books and preventing             libraries from ever getting overwritten by other programs.
 
 <b><h2>Requirement Locations For Part 3</h2></b>
   <b><h3>1. Contain an efficient Binary Search Tree</h3></b>
