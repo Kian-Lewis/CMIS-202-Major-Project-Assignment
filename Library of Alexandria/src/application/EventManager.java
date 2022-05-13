@@ -3,6 +3,7 @@ package application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
@@ -31,7 +32,8 @@ public class EventManager {
 	class HandleAdd implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent e) {
-			Alexandria.stage.setScene(AddEntry.buildBookScene());
+			Scene scene = AddEntry.buildBookScene();
+			Alexandria.stage.setScene(scene);
 		}
 	}
 	

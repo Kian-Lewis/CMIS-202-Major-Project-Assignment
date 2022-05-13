@@ -24,14 +24,14 @@ public class AddEntry {
 	
 	private static Template<String> template = new Template<String>(); //static reference to Template.java
 	public static BorderPane bPane = new BorderPane(); //reference to bPane for event handler
-	private static String bookPath = "C:\\temp\\library.txt";//reference to file path
+	private static String bookPath = "src\\library.txt";//reference to file path
 	private static Queue<Book> saveQueue = new LinkedList<>();
 	
 	//build the add book scene
 	public static Scene buildBookScene() {
 		//create panes
 		//place nodes
-		bPane.setTop(template.CreateSimpleHBox("Enter The Correct Details of The Book"));
+		bPane.setTop(template.createSimpleHBox("Enter The Book Details"));
 		bPane.setCenter(bookInfo());
 		bPane.setBottom(eventBox());
 		
@@ -55,6 +55,7 @@ public class AddEntry {
 		
 		//declare textArea
 		TextArea descriptionText = new TextArea();//description
+		descriptionText.setWrapText(true);
 		
 		//combobox and checkbox
 		ComboBox<String> genreBox = new ComboBox<>();
@@ -63,11 +64,11 @@ public class AddEntry {
 		genreBox.setValue("Fantasy");
 		
 		//set contents of authorPane
-		authorBox.getChildren().addAll((template.CreateSmallLabel("Page Count:")), pgCount, template.CreateSmallLabel("Author's First Name:"), fName, 
-				template.CreateSmallLabel("Author's Middle Initial:"), mName, template.CreateSmallLabel("Author's Last Name:"), lName);
+		authorBox.getChildren().addAll((template.createSmallLabel("Page Count:")), pgCount, template.createSmallLabel("Author's First Name:"), fName, 
+				template.createSmallLabel("Author's Middle Initial:"), mName, template.createSmallLabel("Author's Last Name:"), lName);
 		
 		//Set contents of miscPane
-		miscBox.getChildren().addAll(template.CreateSmallLabel("Book Title:"), titleText, template.CreateSmallLabel("Genre:"), genreBox, template.CreateSmallLabel("Description:"), descriptionText);
+		miscBox.getChildren().addAll(template.createSmallLabel("Book Title:"), titleText, template.createSmallLabel("Genre:"), genreBox, template.createSmallLabel("Description:"), descriptionText);
 		
 		//Vboxes get added to Hbox
 		HBox hBox = new HBox();
@@ -153,7 +154,7 @@ public class AddEntry {
 				file.println(book.recordBook());
 				file.close();
 				} catch (FileNotFoundException d) {
-					template.CreateErrorMessage(d.toString());
+					template.createErrorMessage(d.toString());
 				}
 			}
 		}catch (NumberFormatException e) { //Checks if textFields are empty
@@ -167,7 +168,7 @@ public class AddEntry {
 					file.close();
 				}
 			} catch (Exception c) {
-				template.CreateErrorMessage(c.toString());
+				template.createErrorMessage(c.toString());
 			}
 		}
 	}
@@ -181,23 +182,23 @@ public class AddEntry {
 		EventManager eventManager = new EventManager();
 				
 		//Back to main menu
-		Button btHome = template.CreateButton("Home");
+		Button btHome = template.createButton("Home");
 		btHome.setOnAction(eventManager.handleHome);
 				
 		//View Library
-		Button btView = template.CreateButton("Books");
+		Button btView = template.createButton("Books");
 		btView.setOnAction(eventManager.handleView);
 		
 		//Save book to queue button
-		Button btQueue = template.CreateButton("Add Another Book");
+		Button btQueue = template.createButton("Add Another Book");
 		btQueue.setOnAction(eventManager.handleQueue);
 		
 		//Save queue to file button
-		Button btSave = template.CreateButton("Save Books");
+		Button btSave = template.createButton("Save Books");
 		btSave.setOnAction(eventManager.handleSave);
 
 		//Quit the application
-		Button btQuit = template.CreateButton("Quit");
+		Button btQuit = template.createButton("Quit");
 		btQuit.setOnAction(eventManager.handleQuit);
 				
 		//add buttons

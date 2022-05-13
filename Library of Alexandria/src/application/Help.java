@@ -45,7 +45,7 @@ public class Help {
 		BorderPane bPane = new BorderPane();//Create border pane
 		
 		//place nodes
-		bPane.setCenter(template.CreateSmallLabel(Description()));
+		bPane.setCenter(template.createSmallLabel(Description()));
 		bPane.setBottom(EventBox());	
 		
 		Scene helpScene = new Scene(bPane);
@@ -61,11 +61,11 @@ public class Help {
 				EventManager eventManager = new EventManager();
 				
 				//Back to main menu
-				Button btHome = template.CreateButton("Home");
+				Button btHome = template.createButton("Home");
 				btHome.setOnAction(eventManager.handleHome);
 
 				//Quit the application
-				Button btQuit = template.CreateButton("Quit");
+				Button btQuit = template.createButton("Quit");
 				btQuit.setOnAction(eventManager.handleQuit);
 				
 				//add buttons

@@ -16,7 +16,7 @@ public class Template <T> {
 	EventManager eventManager = new EventManager();
 	
 	//create a button
-	public Button CreateButton(T name) {
+	public Button createButton(T name) {
 		Button bt = new Button(name.toString());
 		bt.setStyle("-fx-border-color: lightgray; -fx-background-color: darkgray; "
 				+ "-fx-text-fill: white");
@@ -26,7 +26,7 @@ public class Template <T> {
 	}
 	
 	//create a button from any integer, double, etc...
-	public Button CreateNumButton(T name) {
+	public Button createNumButton(T name) {
 		Button bt = new Button(String.valueOf(name));
 		bt.setStyle("-fx-border-color: lightgray; -fx-background-color: darkgray; "
 				+ "-fx-text-fill: white");
@@ -36,7 +36,7 @@ public class Template <T> {
 	}
 	
 	//Create a huge label
-	public Label CreateHugeLabel(T name) {
+	public Label createHugeLabel(T name) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: black");
 		lbl.setFont(Font.font("Times New Roman", 36));
@@ -45,17 +45,17 @@ public class Template <T> {
 		return lbl;
 	}
 	
-	//create a big label with color specified
-	public Label CreateMainLabel(T name, String color) {
+	//create a big white label
+	public Label createBigWhiteLabel(T name) {
 		Label lbl = new Label(name.toString());
-		lbl.setStyle("-fx-text-fill: " + color);
+		lbl.setStyle("-fx-text-fill: white");
 		lbl.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
 		
 		return lbl;
 	}
 	
-	//create a big label with no color specified
-	public Label CreateBigLabel(T name) {
+	//create a big black label
+	public Label createBigLabel(T name) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: black");
 		lbl.setFont(Font.font("Times New Roman", 25));
@@ -65,25 +65,26 @@ public class Template <T> {
 	}
 	
 	//create big label from integer, double, etc...
-	public Label CreateNumMainLabel(T name, String color) {
+	public Label createNumMainLabel(T name, String color) {
 		Label lbl = new Label(String.valueOf(name));
 		lbl.setStyle("-fx-text-fill: " + color);
 		lbl.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
 		
 		return lbl;
 	}
+	
 	//create big label from integer, double, etc...
-		public Label CreateNumBigLabel(T name) {
+		public Label createNumBigLabel(T name) {
 		Label lbl = new Label(String.valueOf(name));
 		lbl.setStyle("-fx-text-fill: black");
 		lbl.setFont(Font.font("Times New Roman", 26));
 		lbl.setWrapText(true);
 			
 		return lbl;
-		}
+	}
 	
 	//create a smaller label for titles to be clicked on
-	public Label CreateSmallLabel(T name) {
+	public Label createSmallLabel(T name) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: black");
 		lbl.setFont(Font.font("Times New Roman", 16));
@@ -92,7 +93,7 @@ public class Template <T> {
 	}
 	
 	//create a smaller label
-	public Label CreateSmallTitleLabel(T name) {
+	public Label createSmallTitleLabel(T name) {
 		Label lbl = new Label(name.toString());
 		lbl.setStyle("-fx-text-fill: blue");
 		lbl.setFont(Font.font("Times New Roman", 16));
@@ -101,10 +102,10 @@ public class Template <T> {
 		lbl.setOnMouseClicked(eventManager.handleDescription);
 		
 		return lbl;
-		}
+	}
 	
 	//create a small label from an integer, double, etc...
-	public Label CreateNumSmallLabel(T count) {
+	public Label createNumSmallLabel(T count) {
 		String lblName = String.valueOf(count);
 		
 		Label lbl = new Label(lblName);
@@ -115,14 +116,14 @@ public class Template <T> {
 	}
 	
 	//creates an hbox
-	public HBox CreateSimpleHBox(T contents) {
+	public HBox createSimpleHBox(T contents) {
 		HBox hBox = new HBox(15);
 		hBox.setPadding(new Insets(15, 15, 15, 15));
 		hBox.setStyle("-fx-background-color: gray");
 		hBox.setAlignment(Pos.CENTER);
 		
 		//create
-		Label header = CreateMainLabel(contents, "white");
+		Label header = createBigWhiteLabel(contents);
 		
 		//add label
 		hBox.getChildren().add(header);
@@ -132,10 +133,10 @@ public class Template <T> {
 	
 	//creates an error message
 	@SuppressWarnings("unchecked")
-	public Stage CreateErrorMessage(String error) {
+	public Stage createErrorMessage(String error) {
 		//Set stage and scene containing error message
 		Stage stage = new Stage();
-		Scene scene = new Scene(CreateSmallLabel((T) ("There was an error: " + error)));
+		Scene scene = new Scene(createSmallLabel((T) ("There was an error: " + error)));
 		
 		//Set qualities of stage
 		stage.setResizable(false);

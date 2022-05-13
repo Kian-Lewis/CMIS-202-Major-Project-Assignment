@@ -1,9 +1,15 @@
 package application;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,17 +23,45 @@ public class Alexandria extends Application{
 	//main class
 	@Override
 	public void start(Stage primaryStage) {
-		BorderPane bPane = new BorderPane();//Create border pane
+		BorderPane bPane = new BorderPane(); //Create main border pane
+		GridPane gPane = new GridPane(); //Create gridPane for center of bPane
+		HBox innerBox = new HBox();//Create the hbox for the title
+		
+		//set properties of the grid pane
+		gPane.setVgap(10);
+		gPane.setPadding(new Insets(10,10,10,10));
+		gPane.setAlignment(Pos.CENTER);
+		innerBox.setAlignment(Pos.CENTER);
+		
+		//Instantiate image variables
+		Image image = null;
+		ImageView logo = null;
+		
+		//Create the logo image, not licensed
+		try {
+			image = new Image(new FileInputStream("src\\Book-Icon.jpg"));		//set the file path for the logo image
+			logo = new ImageView(image);										//set the image view to the image file
+			logo.setFitHeight(400); 											//set the height of the image to 500px
+			logo.setFitWidth(500); 												//set the width of the image to 500px
+			logo.setPreserveRatio(true);										//make the image preserve its aspect ratio(square)
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//Add contents of grid pane
+		innerBox.getChildren().add(template.createHugeLabel("Digital Library"));
+		gPane.add(innerBox, 0, 1);
+		gPane.add(logo, 0, 2);
 		
 		//place nodes
-		bPane.setCenter(template.CreateMainLabel("Digital Library", "black"));
+		bPane.setCenter(gPane);
 		bPane.setBottom(eventBox());
 		
 		//create scene and set it to the stage
 		Scene scene = new Scene(bPane);
 		primaryStage.setResizable(false);
-		primaryStage.setHeight(700);
-		primaryStage.setWidth(700);
+		primaryStage.setHeight(800);
+		primaryStage.setWidth(800);
 		primaryStage.setTitle("Library of Alexandria");
 		primaryStage.setScene(scene);
 		stage = primaryStage;
@@ -43,19 +77,19 @@ public class Alexandria extends Application{
 		EventManager eventManager = new EventManager();
 		
 		//create buttons
-		Button btView = template.CreateButton("Books");
+		Button btView = template.createButton("Books");
 		btView.setOnAction(eventManager.handleView);
 		
 		//add a new book
-		Button btAdd = template.CreateButton("New Book");
+		Button btAdd = template.createButton("New Book");
 		btAdd.setOnAction(eventManager.handleAdd);
 		
 		//Open the description
-		Button btHelp = template.CreateButton("Help");
+		Button btHelp = template.createButton("Help");
 		btHelp.setOnAction(eventManager.handleHelp);
 		
 		//Quit the application
-		Button btQuit = template.CreateButton("Quit");
+		Button btQuit = template.createButton("Quit");
 		btQuit.setOnAction(eventManager.handleQuit);
 		
 		//add buttons
@@ -70,10 +104,38 @@ public class Alexandria extends Application{
 	//method for other classes to build the main menu
 	public static Scene buildStartScene() {
 		BorderPane bPane = new BorderPane();//Create border pane
+		GridPane gPane = new GridPane(); //Create gridPane for center of bPane
+		HBox innerBox = new HBox();//Create the hbox for the title
+		
+		//set properties of the grid pane
+		gPane.setVgap(10);
+		gPane.setPadding(new Insets(10,10,10,10));
+		gPane.setAlignment(Pos.CENTER);
+		innerBox.setAlignment(Pos.CENTER);
+		
+		//Instantiate image variables
+		Image image = null;
+		ImageView logo = null;
+		
+		//Create the logo image, not licensed
+		try {
+			image = new Image(new FileInputStream("src\\Book-Icon.jpg"));		//set the file path for the logo image
+			logo = new ImageView(image);										//set the image view to the image file
+			logo.setFitHeight(400); 											//set the height of the image to 500px
+			logo.setFitWidth(500); 												//set the width of the image to 500px
+			logo.setPreserveRatio(true);										//make the image preserve its aspect ratio(square)
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//Add contents of grid pane
+		innerBox.getChildren().add(template.createHugeLabel("Digital Library"));
+		gPane.add(innerBox, 0, 1);
+		gPane.add(logo, 0, 2);
 		
 		//place nodes
-		bPane.setCenter(template.CreateMainLabel("Digital Library", ""));
-		bPane.setBottom(eventBox());	
+		bPane.setCenter(gPane);
+		bPane.setBottom(eventBox());
 		
 		Scene startScene = new Scene(bPane);
 		

@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 public class ViewLibrary {
 	private static Template<String> template = new Template<String>();
 	private static Template<Integer> intTemplate = new Template<Integer>();
-	private static String bookPath = "C:\\temp\\library.txt";//reference to file path
+	private static String bookPath = "src\\library.txt";//reference to file path
 	private static ArrayList<Book> bookArray;
 	
 	//Hash map to connect a description to its title
@@ -29,20 +29,18 @@ public class ViewLibrary {
 	//build the scene for displaying books
 	public static Scene buildLibraryScene() {
 		//create the arraylist of type Book to store books from file
-		int listSize = 0;
 		try {
 			cleanDuplicates(); //clean the file of duplicates before building ui
 			bookArray = assembleLibrary(); //build array of books from file
-			listSize = bookArray.size();
 			
 			//Build hash map for displaying descriptions
 			buildDescriptionMap();
 		} catch (NullPointerException e){
-			template.CreateErrorMessage(e.toString());
+			template.createErrorMessage(e.toString());
 		}
 		
 		//sort the array list based on author last name
-		mergeSort(0, listSize - 1);
+		bookArray = MyMergeSort.threadedMergeSort(bookArray);
 		
 		//build ScrollPane so that if large enough the user can scroll through their books
 		ScrollPane sPane = new ScrollPane(buildLibrary());
@@ -51,6 +49,7 @@ public class ViewLibrary {
 		
 		//create borderpane
 		BorderPane bPane = new BorderPane();
+		bPane.setTop(template.createSimpleHBox("Click on The Title To See Description"));
 		bPane.setCenter(sPane); //put scroll pane in center
 		bPane.setBottom(eventBox()); //put buttons on bottom
 		
@@ -71,7 +70,7 @@ public class ViewLibrary {
 			
 			return returnList;
 		} catch (Exception e) {
-			template.CreateErrorMessage(e.toString());
+			e.printStackTrace();;
 		}
 		return null;
 	}
@@ -131,10 +130,10 @@ public class ViewLibrary {
 		pageBox.setPadding(new Insets(15, 15, 15, 15));
 		
 		//add labels
-		titleBox.getChildren().add(template.CreateMainLabel("Title", "black")); //create title header
-		authorBox.getChildren().add(template.CreateMainLabel("Author", "black")); //create author header
-		genreBox.getChildren().add(template.CreateMainLabel("Genre", "black")); //create genre header
-		pageBox.getChildren().add(template.CreateMainLabel("Pages", "black")); //create page count header
+		titleBox.getChildren().add(template.createBigLabel("Title")); //create title header
+		authorBox.getChildren().add(template.createBigLabel("Genre")); //create author header
+		genreBox.getChildren().add(template.createBigLabel("Author")); //create genre header
+		pageBox.getChildren().add(template.createBigLabel("Pages")); //create page count header
 			
 		//set list size variable 
 		int listSize = bookArray.size();
@@ -143,10 +142,10 @@ public class ViewLibrary {
 			//get the book at the specified spot
 			Book book = (Book) bookArray.get(i);
 			//add each part of the book to display in order
-			titleBox.getChildren().add(template.CreateSmallTitleLabel(book.getTitle()));
-			authorBox.getChildren().add(template.CreateSmallLabel(book.getAuthor()));
-			genreBox.getChildren().add(template.CreateSmallLabel(book.getGenre()));
-			pageBox.getChildren().add(intTemplate.CreateNumSmallLabel(book.getPageCount()));
+			titleBox.getChildren().add(template.createSmallTitleLabel(book.getTitle()));
+			authorBox.getChildren().add(template.createSmallLabel(book.getAuthor()));
+			genreBox.getChildren().add(template.createSmallLabel(book.getGenre()));
+			pageBox.getChildren().add(intTemplate.createNumSmallLabel(book.getPageCount()));
 		}
 			
 		//add vboxes to hbox
@@ -166,82 +165,6 @@ public class ViewLibrary {
 			String bookTitle = book.getTitle();
 
 			descriptionMap.put(bookTitle, book);
-		}
-	}
-	
-	//Comments on merge sort efficiency
-	/*
-	 The way that merge sort works is by taking on a divide and conquer type approach. It recursively breaks down a problem into two or more 
-	 sub-problems, and then breaking the sub-problems into more sub-problems, etc... eventually the problems will be simple enough to be solved 
-	 in a direct manner. After a problem reaches that point, the sub-problems will have their solutions combined(merged) back into one big solution 
-	 to the original problem.
-	 
-	 The steps taken consist of:
-	 	 - checking whether there is more than 1 element in the list, if there isn't then the sort does not execute
-	 	 - recursively divide the list into halves until it can't be divided anymore
-	 	 - merge the smaller list back into a new list in the correct order.
-	 	 
-	 The space complexity for merge sort is O(n) but shouldn't be too relevant anyway, as most users of this program won't have a large enough library 
-	 for this to be relevant.
-	 
-	 The time complexity is the O(nLogn) in all cases. This means that as the program expands and as user libraries grow larger the complexity will 
-	 not increase and will remain consistent. This means that the program may slow down as libraries get extremely large, but this program was meant 
-	 for smaller libraries in the first place, so such a problem shouldn't be relevant.
-	 
-	 Overall complexity wasn't much of a consideration because, as stated earlier libraries of users shouldn't be large enough for that to be relevant.
-	 As a whole though, if a users library were to be extremely large, merge sort would be more efficient than, for example, quick sort. This is because 
-	 the worst case for merge sort is O(nLogn), whereas quick sorts is O(n).
-	 */
-	
-	//starts the sorting process
-	public static void mergeSort(int startIndex, int endIndex) {
-		if (startIndex < endIndex && (endIndex - startIndex) >= 1) {
-			//separate the halves
-			int midPoint = (endIndex + startIndex) / 2;
-
-			mergeSort(startIndex, midPoint);
-			mergeSort(midPoint + 1, endIndex);
-			
-			//merge the indexes into one
-			merge(startIndex, midPoint, endIndex);
-		}
-	}
-	
-	//puts the arraylist back together
-	public static void merge(int startIndex, int midPoint, int endIndex) {
-		
-		ArrayList<Book> mergeSortedArray = new ArrayList<Book>();
-		
-		int leftIndex = startIndex;
-		int rightIndex = midPoint + 1;
-		
-		while(leftIndex <= midPoint && rightIndex <= endIndex) {
-
-			if (bookArray.get(leftIndex).getLastName().charAt(0) <= bookArray.get(rightIndex).getLastName().charAt(0)) {
-				mergeSortedArray.add(bookArray.get(leftIndex));
-				leftIndex++;
-			} else {
-				mergeSortedArray.add(bookArray.get(rightIndex));
-				rightIndex++;
-			}
-		}
-		
-		//One while loop below will execute
-		while(leftIndex <= midPoint) {
-			mergeSortedArray.add(bookArray.get(leftIndex));
-			leftIndex++;
-		}
-		
-		while(rightIndex <= endIndex) {
-			mergeSortedArray.add(bookArray.get(rightIndex));
-			rightIndex++;
-		}
-
-		int i = 0;
-		int k = startIndex;
-		while (i < mergeSortedArray.size()) {
-			bookArray.set(k, (Book) mergeSortedArray.get(i++));
-			k++;
 		}
 	}
 	
@@ -306,7 +229,7 @@ public class ViewLibrary {
 			//call method to create list without duplicates
 			overwriteFile(cleanList);
 		} catch (Exception e) {
-			template.CreateErrorMessage(e.toString());
+			template.createErrorMessage(e.toString());
 		}
 	}
 
@@ -332,7 +255,7 @@ public class ViewLibrary {
 					file.close();
 				}
 			} catch (Exception e){
-				template.CreateErrorMessage(e.toString());
+				template.createErrorMessage(e.toString());
 			}
 
 		}
@@ -347,23 +270,23 @@ public class ViewLibrary {
 		EventManager eventManager = new EventManager();
 		
 		//create buttons
-		Button btHome = template.CreateButton("Home");
+		Button btHome = template.createButton("Home");
 		btHome.setOnAction(eventManager.handleHome);
 		
 		//Clean the library of duplicates
-		Button btClean = template.CreateButton("Remove Duplicates");
+		Button btClean = template.createButton("Remove Duplicates");
 		btClean.setOnAction(eventManager.handleClean);
 		
 		//add a new book
-		Button btAdd = template.CreateButton("New Book");
+		Button btAdd = template.createButton("New Book");
 		btAdd.setOnAction(eventManager.handleAdd);
 		
 		//Open the description
-		Button btHelp = template.CreateButton("Help");
+		Button btHelp = template.createButton("Help");
 		btHelp.setOnAction(eventManager.handleHelp);
 		
 		//Quit the application
-		Button btQuit = template.CreateButton("Quit");
+		Button btQuit = template.createButton("Quit");
 		btQuit.setOnAction(eventManager.handleQuit);
 		
 		//add buttons
