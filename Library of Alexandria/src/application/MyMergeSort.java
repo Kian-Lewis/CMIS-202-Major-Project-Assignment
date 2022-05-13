@@ -23,22 +23,29 @@ public class MyMergeSort {
 		//setting size
 		final int size = list.size();
 		
-		boolean exact = size % MAX_THREAD_COUNT == 0;
-		int maxlim = exact? size / MAX_THREAD_COUNT: size / (MAX_THREAD_COUNT -1);
+		//Setting the workload for each thread
+		//divides the work equally if the number of elements is equal to the max thread count,
+		//otherwise it will assign the work to 1 remaining thread.
+		boolean equalWork = size % MAX_THREAD_COUNT == 0;
+		int limit = equalWork? size / MAX_THREAD_COUNT: size / (MAX_THREAD_COUNT -1);
 		
-		maxlim = maxlim < MAX_THREAD_COUNT? MAX_THREAD_COUNT : maxlim;
+		//Assigns everything to one thread if the workload isn't enough to warrant more threads
+		limit = limit < MAX_THREAD_COUNT? MAX_THREAD_COUNT : limit;
 		
+		//Array list that will help track threads
 		final ArrayList<ThreadSort> threads = new ArrayList<>();
 		
-		for (int i = 0; i < size; i += maxlim) {
+		//Assign each thread its index range for workload
+		for (int i = 0; i < size; i += limit) {
 			int begin = i;
 			int remaining = size - i;
-			int end = remaining < maxlim? i+(remaining - 1): i+(maxlim - 1);
+			int end = remaining < limit? i+(remaining - 1): i+(limit - 1);
 			final ThreadSort a = new ThreadSort(list, begin, end);
 			
 			threads.add(a);
 		}
 		
+		//wait until all threads are sorted
 		for (Thread t: threads) {
 			try {
 				t.join();
@@ -46,10 +53,11 @@ public class MyMergeSort {
 			}
 		}
 		
-		for (int i = 0; i < size; i += maxlim)  {
+		//Merge everything back into one array list
+		for (int i = 0; i < size; i += limit)  {
 			int mid = i == 0? 0 : i - 1;
 			int remaining = size - i;
-			int end = remaining < maxlim? i+(remaining - 1): i+(maxlim-1);
+			int end = remaining < limit? i+(remaining - 1): i+(limit-1);
 			
 			merge(list, 0, mid, end);
 		}
